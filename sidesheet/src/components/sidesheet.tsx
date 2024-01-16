@@ -1,5 +1,5 @@
 import { Button, Tabs } from "@equinor/eds-core-react";
-import SideSheet from "@equinor/fusion-react-side-sheet";
+import { HEXString, SideSheet } from "@equinor/fusion-react-side-sheet";
 
 import { useState } from "react";
 import Footer from "./footer/footer";
@@ -11,7 +11,7 @@ type SheetProps = {
   subtitle: string;
   actions: JSX.Element;
   indicator?: false;
-  indicatorColor?: `#${string}`;
+  indicatorColor?: HEXString;
 };
 
 export const ProcosysSideSheet = ({
