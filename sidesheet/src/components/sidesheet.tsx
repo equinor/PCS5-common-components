@@ -53,9 +53,6 @@ export const ProcosysSideSheet = ({
         {tabs && <ProcosysTabs tabs={tabs} />}
 
         <ContentWrapper>{children}</ContentWrapper>
-        <Footer>
-          <StatusSection />
-        </Footer>
       </SideSheet.Content>
     </SideSheet>
   );
