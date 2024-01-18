@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { TopContent } from "./contentSection/topContent";
 import { StatusSection } from "./footer/status";
 import { Tab } from "./types";
+import { ProcosysTabs } from "./tabs";
 
 type SheetProps = {
   openSheet: boolean;
@@ -13,21 +14,16 @@ type SheetProps = {
   title: string;
   subtitle: string;
   actions: JSX.Element;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   tabs?: Array<Tab>;
   indicator?: boolean;
   indicatorColor?: HEXString;
 };
 
-const StyledTab = styled(Tabs.Tab)`
-  border-radius: 0px;
-`;
-
 const ContentWrapper = styled.div`
   display: flex;
   gap: 24px;
   flex-direction: column;
-  margin-left: -16px;
   padding: 24px;
 `;
 
@@ -54,21 +50,12 @@ export const ProcosysSideSheet = ({
       <SideSheet.SubTitle subTitle={subtitle} />
       <SideSheet.Actions>{actions}</SideSheet.Actions>
       <SideSheet.Content>
-        {tabs && (
-          <Tabs style={{ margin: "-16px" }}>
-            <Tabs.List>
-              {tabs.map((tab) => {
-                return <StyledTab variant="minWidth">{tab.TabTitle}</StyledTab>;
-              })}
-            </Tabs.List>
-            <Tabs.Panels>
-              {tabs.map((tab) => {
-                return <StyledTab variant="minWidth">{tab.TabTitle}</StyledTab>;
-              })}
-            </Tabs.Panels>
-          </Tabs>
-        )}
+        {tabs && <ProcosysTabs tabs={tabs} />}
+
         <ContentWrapper>{children}</ContentWrapper>
+        <Footer>
+          <StatusSection />
+        </Footer>
       </SideSheet.Content>
     </SideSheet>
   );
