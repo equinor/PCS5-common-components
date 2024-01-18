@@ -1,8 +1,11 @@
-import { Button, Tabs } from "@equinor/eds-core-react";
 import { HEXString, SideSheet } from "@equinor/fusion-react-side-sheet";
 
-import { useState } from "react";
 import Footer from "./footer/footer";
+import { Tabs } from "@equinor/eds-core-react";
+import styled from "styled-components";
+import { TopContent } from "./contentSection/topContent";
+import { StatusSection } from "./footer/status";
+import { Tab } from "./types";
 
 type SheetProps = {
   openSheet: boolean;
@@ -10,9 +13,23 @@ type SheetProps = {
   title: string;
   subtitle: string;
   actions: JSX.Element;
-  indicator?: false;
+  children: React.ReactNode;
+  tabs?: Array<Tab>;
+  indicator?: boolean;
   indicatorColor?: HEXString;
 };
+
+const StyledTab = styled(Tabs.Tab)`
+  border-radius: 0px;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  margin-left: -16px;
+  padding: 24px;
+`;
 
 export const ProcosysSideSheet = ({
   openSheet,
@@ -20,14 +37,15 @@ export const ProcosysSideSheet = ({
   title,
   subtitle,
   actions,
+  children,
   indicator = false,
   indicatorColor,
+  tabs,
 }: SheetProps) => {
   return (
     <SideSheet
-      animate
       enableFullscreen
-      minWidth={480}
+      minWidth={700}
       onClose={() => setOpenSheet(false)}
       isOpen={openSheet}
     >
@@ -36,7 +54,21 @@ export const ProcosysSideSheet = ({
       <SideSheet.SubTitle subTitle={subtitle} />
       <SideSheet.Actions>{actions}</SideSheet.Actions>
       <SideSheet.Content>
-        <Footer />
+        {tabs && (
+          <Tabs style={{ margin: "-16px" }}>
+            <Tabs.List>
+              {tabs.map((tab) => {
+                return <StyledTab variant="minWidth">{tab.TabTitle}</StyledTab>;
+              })}
+            </Tabs.List>
+            <Tabs.Panels>
+              {tabs.map((tab) => {
+                return <StyledTab variant="minWidth">{tab.TabTitle}</StyledTab>;
+              })}
+            </Tabs.Panels>
+          </Tabs>
+        )}
+        <ContentWrapper>{children}</ContentWrapper>
       </SideSheet.Content>
     </SideSheet>
   );
