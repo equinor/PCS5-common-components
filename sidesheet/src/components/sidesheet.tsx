@@ -27,7 +27,7 @@ const ContentWrapper = styled.div`
   padding: 24px;
 `;
 
-export const ProcosysSideSheet = ({
+const ProcosysSideSheet = ({
   openSheet,
   setOpenSheet,
   title,
@@ -51,9 +51,13 @@ export const ProcosysSideSheet = ({
       <SideSheet.Actions>{actions}</SideSheet.Actions>
       <SideSheet.Content>
         {tabs && <ProcosysTabs tabs={tabs} />}
-
-        <ContentWrapper>{children}</ContentWrapper>
+        <ContentWrapper>{children}</ContentWrapper>{" "}
+        <Footer>
+          <StatusSection />
+        </Footer>
       </SideSheet.Content>
     </SideSheet>
   );
 };
+
+export default ProcosysSideSheet;
