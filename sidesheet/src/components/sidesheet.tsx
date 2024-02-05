@@ -1,12 +1,13 @@
 import { HEXString, SideSheet } from "@equinor/fusion-react-side-sheet";
 
-import Footer from "./footer/footer";
+import { Footer } from "./footer/footer";
 import { Tabs } from "@equinor/eds-core-react";
 import styled from "styled-components";
 import { TopContent } from "./contentSection/topContent";
 import { StatusSection } from "./footer/status";
 import { Tab } from "./types";
-import { ProcosysTabs } from "./tabs";
+import { ProcosysTabs } from "./tabs/tabs";
+import { isMobileDevice } from "../utils";
 
 type SheetProps = {
   openSheet: boolean;
@@ -41,7 +42,7 @@ const ProcosysSideSheet = ({
   return (
     <SideSheet
       enableFullscreen
-      minWidth={700}
+      minWidth={isMobileDevice() ? window.innerWidth : 480}
       onClose={() => setOpenSheet(false)}
       isOpen={openSheet}
     >
@@ -52,9 +53,6 @@ const ProcosysSideSheet = ({
       <SideSheet.Content>
         {tabs && <ProcosysTabs tabs={tabs} />}
         <ContentWrapper>{children}</ContentWrapper>{" "}
-        <Footer>
-          <StatusSection />
-        </Footer>
       </SideSheet.Content>
     </SideSheet>
   );
