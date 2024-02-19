@@ -8,6 +8,7 @@ import { StatusSection } from "./footer/status";
 import { Tab } from "./types";
 import { ProcosysTabs } from "./tabs/tabs";
 import { isMobileDevice } from "../utils";
+import { useEffect, useState } from "react";
 
 type SheetProps = {
   openSheet: boolean;
@@ -19,6 +20,7 @@ type SheetProps = {
   tabs?: Array<Tab>;
   indicator?: boolean;
   indicatorColor?: HEXString;
+  footer?: React.ReactNode;
 };
 
 const ContentWrapper = styled.div`
@@ -38,11 +40,27 @@ const ProcosysSideSheet = ({
   indicator = false,
   indicatorColor,
   tabs,
+  footer,
 }: SheetProps) => {
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.keyCode === 27) {
+        setOpenSheet(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Don't forget to clean up
+    return function cleanup() {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <SideSheet
       enableFullscreen
-      minWidth={isMobileDevice() ? window.innerWidth : 480}
+      minWidth={isMobileDevice() ? window.innerWidth : 700}
       onClose={() => setOpenSheet(false)}
       isOpen={openSheet}
     >
@@ -52,7 +70,7 @@ const ProcosysSideSheet = ({
       <SideSheet.Actions>{actions}</SideSheet.Actions>
       <SideSheet.Content>
         {tabs && <ProcosysTabs tabs={tabs} />}
-        <ContentWrapper>{children}</ContentWrapper>{" "}
+        <ContentWrapper>{children}</ContentWrapper> {footer}
       </SideSheet.Content>
     </SideSheet>
   );

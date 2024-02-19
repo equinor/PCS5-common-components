@@ -14,14 +14,13 @@ const StyledTab = styled(Tabs.Tab)`
 `;
 
 const StyledTabs = styled(Tabs)`
-  margin: -16px;
+  margin-left: -16px;
   width: 100%;
 `;
 
 const StyledPanel = styled(Tabs.Panel)`
   margin-left: 24px;
   padding-right: 24px;
-  margin-right: 24px;
 `;
 
 export const ProcosysTabs = ({ tabs }: TabProps) => {
