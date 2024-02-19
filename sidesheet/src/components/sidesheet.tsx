@@ -1,8 +1,14 @@
-import { Button, Tabs } from "@equinor/eds-core-react";
 import { HEXString, SideSheet } from "@equinor/fusion-react-side-sheet";
 
-import { useState } from "react";
-import Footer from "./footer/footer";
+import { Footer } from "./footer/footer";
+import { Tabs } from "@equinor/eds-core-react";
+import styled from "styled-components";
+import { TopContent } from "./contentSection/topContent";
+import { StatusSection } from "./footer/status";
+import { Tab } from "./types";
+import { ProcosysTabs } from "./tabs/tabs";
+import { isMobileDevice } from "../utils";
+import { useEffect, useState } from "react";
 
 type SheetProps = {
   openSheet: boolean;
@@ -10,24 +16,51 @@ type SheetProps = {
   title: string;
   subtitle: string;
   actions: JSX.Element;
-  indicator?: false;
+  children?: React.ReactNode;
+  tabs?: Array<Tab>;
+  indicator?: boolean;
   indicatorColor?: HEXString;
+  footer?: React.ReactNode;
 };
 
-export const ProcosysSideSheet = ({
+const ContentWrapper = styled.div`
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  padding: 24px;
+`;
+
+const ProcosysSideSheet = ({
   openSheet,
   setOpenSheet,
   title,
   subtitle,
   actions,
+  children,
   indicator = false,
   indicatorColor,
+  tabs,
+  footer,
 }: SheetProps) => {
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.keyCode === 27) {
+        setOpenSheet(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Don't forget to clean up
+    return function cleanup() {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <SideSheet
-      animate
       enableFullscreen
-      minWidth={480}
+      minWidth={isMobileDevice() ? window.innerWidth : 700}
       onClose={() => setOpenSheet(false)}
       isOpen={openSheet}
     >
@@ -36,8 +69,11 @@ export const ProcosysSideSheet = ({
       <SideSheet.SubTitle subTitle={subtitle} />
       <SideSheet.Actions>{actions}</SideSheet.Actions>
       <SideSheet.Content>
-        <Footer />
+        {tabs && <ProcosysTabs tabs={tabs} />}
+        <ContentWrapper>{children}</ContentWrapper> {footer}
       </SideSheet.Content>
     </SideSheet>
   );
 };
+
+export default ProcosysSideSheet;
